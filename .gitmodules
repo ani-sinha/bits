@@ -1,7 +1,7 @@
 [submodule "deps/acpica"]
 	path = deps/acpica
 	url = git@github.com:ani-sinha/bits-acpica.git
-	branch = bits
+	branch = bits-unix2-20220331
 	fetchRecurseSubmodules = true
 [submodule "deps/fdlibm"]
 	path = deps/fdlibm
