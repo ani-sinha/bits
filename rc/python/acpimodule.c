@@ -437,9 +437,9 @@ static asmlinkage ACPI_STATUS wrap_AcpiInstallInterface(ACPI_STRING InterfaceNam
     return AcpiInstallInterface(InterfaceName);
 }
 
-static asmlinkage ACPI_STATUS wrap_AcpiLoadTable(ACPI_TABLE_HEADER *Table)
+static asmlinkage ACPI_STATUS wrap_AcpiLoadTable(ACPI_TABLE_HEADER *Table, UINT32 *TableIdx)
 {
-    return AcpiLoadTable(Table);
+    return AcpiLoadTable(Table, TableIdx);
 }
 
 static asmlinkage unsigned long wrap_AcpiOsGetRootPointer(void)
