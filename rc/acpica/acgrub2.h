@@ -53,7 +53,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Uncomment the next three lines to add debug support
 #define ACPI_DEBUG_OUTPUT
-#define ACPI_DISASSEMBLER
 
 #define ACPI_SHIFT_RIGHT_64(n_hi, n_lo) do { (n_lo) >>= 1; (n_lo) |= ((n_hi) & 1) << 31; (n_hi) >>= 1; } while(0)
 
