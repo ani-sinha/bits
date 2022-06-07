@@ -81,7 +81,7 @@ bool IsEnabledProcessor(ACPI_HANDLE ObjHandle)
     ACPI_DEVICE_INFO *Info;
 
     if (ACPI_SUCCESS(AcpiGetObjectInfo(ObjHandle, &Info)))
-        if ((Info->Type == ACPI_TYPE_PROCESSOR) && (Info->Valid & ACPI_VALID_STA) && (Info->CurrentStatus & ACPI_STA_DEVICE_ENABLED))
+        if (Info->Type == ACPI_TYPE_PROCESSOR)
             ret = true;
     ACPI_FREE(Info);
 
@@ -94,7 +94,7 @@ bool IsEnabledProcessorDev(ACPI_HANDLE ObjHandle)
     ACPI_DEVICE_INFO *Info;
 
     if (ACPI_SUCCESS(AcpiGetObjectInfo(ObjHandle, &Info)))
-        if ((Info->Type == ACPI_TYPE_DEVICE) && (Info->Valid & ACPI_VALID_STA) && (Info->CurrentStatus & ACPI_STA_DEVICE_ENABLED) &&
+        if ((Info->Type == ACPI_TYPE_DEVICE) &&
             (Info->Valid & ACPI_VALID_HID) && (grub_strncmp(Info->HardwareId.String, "ACPI0007", Info->HardwareId.Length) == 0))
             ret = true;
     ACPI_FREE(Info);
