@@ -278,7 +278,6 @@ AcpiOsVprintf (
     dvprintf("acpica", Fmt, Args);
 }
 
-#if 0
 /******************************************************************************
  *
  * FUNCTION:    AcpiOsGetLine
@@ -294,10 +293,22 @@ AcpiOsVprintf (
 
 UINT32
 AcpiOsGetLine (
-    char                    *Buffer)
+    char                    *Buffer,
+    UINT32                  BufferLength,
+    UINT32                  *BytesRead)
 {
+   return 0;
 }
-#endif
+
+ACPI_STATUS
+AcpiOsEnterSleep (
+    UINT8                   SleepState,
+    UINT32                  RegaValue,
+    UINT32                  RegbValue)
+{
+   return (AE_OK);
+}
+
 
 /******************************************************************************
  *
