@@ -37,6 +37,7 @@ __all__ = ["redirect", "write_logfile", "clear", "log", "logonly", "nolog"]
 
 NOLOG_STATE, LOGONLY_STATE, LOG_STATE = range(3)
 state = LOG_STATE
+debug_port = 0x403
 
 class Tee(object):
     """Tee output to both input files provided."""
@@ -64,6 +65,13 @@ def write_logfile(filename):
         if chunk != data[bytes_written:bytes_written+length]:
             _bits.disk_write(f, sector, offset, logdata[bytes_written:bytes_written+length])
         bytes_written += length
+
+def write_log_to_debug_port():
+    log_size = _log.size
+    log_data = _log.getvalue()[:log_size].ljust(log_size, "\n")
+
+    for byte in log_data:
+        _bits.coutb(debug_port, byte)
 
 def _log_header():
     print >>_log, "BIOS Implementation Test Suite (BITS)"

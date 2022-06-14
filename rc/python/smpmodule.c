@@ -47,6 +47,11 @@ struct memop {
     U64 value;
 };
 
+struct memop2 {
+    unsigned short addr;
+    unsigned char value;
+};
+
 static PyObject *bits_bclk(PyObject *self, PyObject *args)
 {
     if (!smp_init())
@@ -408,6 +413,12 @@ static void outb_callback(void *param)
     grub_outb(m->value, m->addr);
 }
 
+static void outb_callback2(void *param)
+{
+    struct memop2 *m = param;
+    grub_outb(m->value, m->addr);
+}
+
 static char *out_keywords[] = {"port", "value", "apicid", NULL};
 
 static PyObject *bits_outb(PyObject *self, PyObject *args, PyObject *keywds)
@@ -427,6 +438,27 @@ static PyObject *bits_outb(PyObject *self, PyObject *args, PyObject *keywds)
     m.value = value;
 
     smp_function(apicid, outb_callback, &m);
+    return Py_BuildValue("");
+}
+
+static PyObject *bits_charoutb(PyObject *self, PyObject *args, PyObject *keywds)
+{
+    struct memop2 m;
+    U16 port;
+    U8 value;
+    unsigned apicid;
+    char *keywords[] = {"port", "value", NULL};
+
+    if (!smp_init())
+        return PyErr_Format(PyExc_RuntimeError, "SMP module failed to initialize.");
+    apicid = bsp_apicid();
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "Hc", keywords, &port, &value))
+        return NULL;
+    m.addr = (unsigned short) port;
+    m.value = (unsigned char) value;
+
+    smp_function(apicid, outb_callback2, &m);
     return Py_BuildValue("");
 }
 
@@ -824,6 +856,7 @@ static PyMethodDef smpMethods[] = {
     {"inw", (PyCFunction)bits_inw, METH_KEYWORDS, "inw(port[, apicid=BSP]) -> read word from IO port on the specified CPU"},
     {"inl", (PyCFunction)bits_inl, METH_KEYWORDS, "inl(port[, apicid=BSP]) -> read dword from IO port on the specified CPU"},
     {"outb", (PyCFunction)bits_outb, METH_KEYWORDS, "outb(port, value[, apicid=BSP]) -> write byte to IO port on the specified CPU"},
+    {"coutb", (PyCFunction)bits_charoutb, METH_KEYWORDS, "coutb(port, value) -> write character to IO port on the first CPU"},
     {"outw", (PyCFunction)bits_outw, METH_KEYWORDS, "outw(port, value[, apicid=BSP]) -> write word to IO port on the specified CPU"},
     {"outl", (PyCFunction)bits_outl, METH_KEYWORDS, "outl(port, value[, apicid=BSP]) -> write dword to IO port on the specified CPU"},
     {"rdmsr",  bits_rdmsr, METH_VARARGS, "rdmsr(apicid, msr) -> long (None if GPF)"},
