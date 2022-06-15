@@ -243,6 +243,10 @@ def init():
                 traceback.print_exc()
 
         print "\nBatch mode complete\n"
+        print ("Sending logs to debug port 0x%x ..." %redirect.debug_port)
+        redirect.write_log_to_debug_port()
+        print "Pushed all logs to debug port"
+
         redirect.write_logfile("/boot/bits-log.txt")
 
     with import_annotation("cpumenu"):

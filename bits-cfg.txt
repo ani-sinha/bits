@@ -13,4 +13,4 @@
 batch =
 
 # Uncomment the following to run all available batch operations
-#batch = test acpi smbios
+batch = test acpi smbios
